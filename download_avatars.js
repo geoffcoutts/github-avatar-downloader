@@ -24,7 +24,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
 var input = process.argv.slice(2,4);
 
-getRepoContributors("jquery", "jquery", function(err, result) {
+getRepoContributors(input[0], input[1], function(err, result) {
   // loop through avatar results and pull the avatar_url to download
   console.log(input[1]);
   fs.existsSync(`${input[1]}-avatars`) || fs.mkdirSync(`${input[1]}-avatars`);
