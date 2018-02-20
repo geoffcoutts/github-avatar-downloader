@@ -7,8 +7,8 @@ So that I can use them on a website.
 var request = require('request');
 var fs = require('fs');
 
-// Create file in same directory called secrets.js and export your GITHUB_TOKEN.
-var token = require('./secrets.js');
+// Create file in same directory called .env and list your github token as DB_PASS='token'.
+require('dotenv').config();
 
 var input = process.argv.slice(2,4);
 
@@ -24,7 +24,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
     url: `https://api.github.com/repos/${repoOwner}/${repoName}/contributors`,
     headers: {
       'User-Agent': 'request',
-      'Authorization': `token ${token.GITHUB_TOKEN}`
+      'Authorization': `token ${process.env.DB_PASS}`
     }
   };
 
