@@ -2,31 +2,33 @@ var request = require('request');
 var token = require('./secrets.js');
 var fs = require('fs');
 
+var input = process.argv.slice(2,4);
+
 console.log('Welcome to the GitHub Avatar Downloader!');
 
 function getRepoContributors(repoOwner, repoName, cb) {
-  // if (process.argv[2] || process.argv[3] === "") {
-  //   return console.log('Please try again and enter a valid repo owner and name');
-  // }
+  if (repoOwner === undefined || repoName === undefined) {
+    return console.log('Please try again and enter both the repo owner and name');
+  }
+  // url path to variable github repo contributors page
   var options = {
     url: `https://api.github.com/repos/${repoOwner}/${repoName}/contributors`,
     headers: {
-      'user-Agent': 'request',
-      'Authorization': token
+      'User-Agent': 'request',
+      'Authorization': `token ${token.GITHUB_TOKEN}`
     }
   };
 
+  //parse JSON data to prepare to pull the avatar_url from each entry
   request(options, function(err, res, body) {
     var data = JSON.parse(body);
     cb(err, data);
   });
 }
 
-var input = process.argv.slice(2,4);
 
 getRepoContributors(input[0], input[1], function(err, result) {
   // loop through avatar results and pull the avatar_url to download
-  console.log(input[1]);
   fs.existsSync(`${input[1]}-avatars`) || fs.mkdirSync(`${input[1]}-avatars`);
   for (i = 0; i < result.length; i++) {
     console.log("Downloading: ", result[i].avatar_url);
